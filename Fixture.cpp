@@ -27,10 +27,10 @@ struct Equipo{
   float longitud; 
 };
 
-struct partido{
-  string visita;
-  string local;
-  string fecha;
+struct Partido{
+  int visita;
+  int local;
+  int fecha;
 };
 
 void leer_archivo(Equipo V[])// agregar lo que recibirá y donde se guardará
@@ -107,13 +107,46 @@ float distanceEarth(float lat1d, float lon1d, float lat2d, float lon2d) {
   v = sin((lon2r - lon1r)/2);
   return 2.0 * earthRadiusKm * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
 }
+void inicializarMatriz(int matriz[][16]){
+  for(int i=0;i<16;i++)
+    for(int j=0;j<16;j++)
+      matriz[i][j]=0;
+}
+
+int menor(float vector[]){
+  float aux=50000;
+  int posicion=0;
+    for(int i=0;i<16;i++){
+      if(aux<vector[i]){
+          aux = vector[i];
+          posicion = i;
+        }
+    }
+    return posicion;
+}
+
+
+void crearFechas(Equipo e[],int matriz[][16], Partido p[], float MD[][16]){
+  float auxvector[16];
+  int i=0;
+  for(int i=0;i<16;i++){
+    for(int j=0;j<16;j++){
+        auxvector[j]=MD[i][j];
+      }
+    matriz[i][menor(auxvector)]=1;
+    cout<<menor(auxvector)<<endl;
+  }
+}
 
 
 int main(int argc, char *argv[]){
 
 Equipo Equipos[16]; // Vector del tipo Equipo
+Partido partidos[225];
 leer_archivo( Equipos); // funcion que lee el archivo y lo separa
 float MD[16][16]; //matriz de distancias
+int cruces[16][16];
+inicializarMatriz(cruces);
 for (int i=0; i<16;i++){
  //cout << "Nombre equipo = "<< Equipos[i].nombre <<endl;
 // cout << "Nombre estadio = "<< Equipos[i].nombre_est <<endl;
@@ -122,29 +155,28 @@ for (int i=0; i<16;i++){
   for (int j=i; j<16 ; j++){
     if ( i==j){
       MD[i][j]=0;
+      cruces[i][j]=1;
     }
     else{
       MD[i][j]= distanceEarth (Equipos[i].latitud, Equipos[i].longitud, Equipos[j].latitud, Equipos[j].longitud);
       MD[j][i]= MD[i][j];
+      cruces[i][j]=1;
     }
-  
-
-}
-
-
-
-
-
-
-
+  }
 }
 
 for (int i=0; i<16;i++){
   for (int j=0; j<16 ; j++){
     cout<<"Distancia entre el estadio "<<Equipos[i].nombre_est<<" y el estadio "<<Equipos[j].nombre_est<<" es = "<< MD[i][j]<< endl;
+  }
 }
+crearFechas(Equipos,cruces,partidos,MD);
+for (int i=0; i<16;i++){
+  for (int j=0; j<16 ; j++){
+    cout<<" "<<cruces[i][j];
+  }
+  cout<<endl;
 }
-
 
 
 }
