@@ -17,6 +17,7 @@ using std::stringstream;
 #include <math.h>
 #include <cmath> 
 #define earthRadiusKm 6371.0
+#include <time.h>
 
 using namespace std;
 
@@ -125,6 +126,34 @@ int menor(float vector[]){
     return posicion;
 }
 
+bool verificarNumeroVector(int vector[], int posicion){
+  bool respuesta = true;
+  int i=0;
+  while(i<16){
+    if(vector[i]==posicion){
+      return true;
+    }
+  }
+  return false;
+}
+
+void CrearFechas2(Equipo e[], int matriz[][16], Partido p[]){
+  srand(time(NULL));
+  int i=0;
+  int fecha[16];
+  while(i<16){
+    int num = rand()%16;
+    if(num<16 && num>=0){
+      if(!verificarNumeroVector(fecha,num)){
+        fecha[i]=num;
+      }
+    }
+    i++;
+  }
+  for (int i = 0; i < 16; ++i){
+    cout<<"vector["<<i<<"]= "<<fecha[i]<<endl;
+  }
+}
 
 void crearFechas(Equipo e[],int matriz[][16], Partido p[], float MD[][16]){
   float auxvector[16];
@@ -170,7 +199,7 @@ for (int i=0; i<16;i++){
     cout<<"Distancia entre el estadio "<<Equipos[i].nombre_est<<" y el estadio "<<Equipos[j].nombre_est<<" es = "<< MD[i][j]<< endl;
   }
 }
-crearFechas(Equipos,cruces,partidos,MD);
+//crearFechas(Equipos,cruces,partidos,MD);
 for (int i=0; i<16;i++){
   for (int j=0; j<16 ; j++){
     cout<<" "<<cruces[i][j];
