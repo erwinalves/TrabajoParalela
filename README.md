@@ -1,4 +1,4 @@
-# TrabajoParalela
+# Trabajo Semestral Computación Paralela
 Trabajo semestral computacion paralela el cual consiste en generar un fixture 
 o calendarización de jornadas de ida y vuelta para los equipos de la 
 primera división del futbol chileno, tomando como referencia sus nombres, 
